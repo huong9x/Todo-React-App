@@ -7,7 +7,7 @@ export default class NewTodoForm extends React.Component {
   
     onInputChange(newTodoName) {
       this.setState({
-        newTodoName : newTodoName
+        newTodoName
       })
     }
   
@@ -16,7 +16,6 @@ export default class NewTodoForm extends React.Component {
       return (
         <div>
           <input type="text" onChange={(even)=>{
-            // console.log(even.target.value)
             this.onInputChange(even.target.value);
           }} value={this.state.newTodoName}></input>
   
@@ -35,3 +34,4 @@ export default class NewTodoForm extends React.Component {
       )
     }
   }
+  

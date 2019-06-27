@@ -2,27 +2,27 @@ import React, {Component} from 'react';
 import                         './App.css';
 import Stat               from './Components/StatComponent';
 import Todo               from './Components/TodoComponent';
-import NewTodoForm        from './Components/NewTodoFormComponent'
+import NewTodoForm        from './Components/NewTodoFormComponent';
 
-export default class App extends Component{
+class App extends Component{
   state = {
-    todo: [
-      {name:'sphinx intern', done:true},
-      {name:'firtinga a girl', done:false},
-      {name:'fucking a girl', done:false},
+    todos: [
+      {name:'Todo 1', done:true},
+      {name:'Todo 2', done:false},
+      {name:'Todo 3', done:false},
 
     ]
   }
 
   addNewTodo(newTodo) {
       this.setState({
-      todo:[newTodo, ...this.state.todo]
+      todos:[newTodo, ...this.state.todos]
     })
   }
 
   countDone() {
     let done = 0;
-    this.state.todo.forEach(todo=>{
+    this.state.todos.forEach(todo=>{
       if (todo.done) {
         done++;
       }
@@ -31,41 +31,44 @@ export default class App extends Component{
   }
 
   clearDone(){
-    const notFinishedTodo = this.state.todo.filter((todo)=>!todo.done);
+    const notFinishedTodo = this.state.todos.filter((todo)=>!todo.done);
     this.setState({
-      todo:notFinishedTodo
+      todos:notFinishedTodo
     })
   }
   handleDoneChange(todoIndex) {
-    let updatedTodo = this.state.todo;
-    updatedTodo[todoIndex].done = !updatedTodo[todoIndex].done;
+    let updatedTodos = this.state.todos;
+    updatedTodos[todoIndex].done = !updatedTodos[todoIndex].done;
 
     this.setState({
-      todo: updatedTodo
+      todos: updatedTodos
     })
   }
 
   render(){
     const done = this.countDone();
-    const totalTodo = this.state.todo.length;
+    const totalTodo = this.state.todos.length;
 
 
     return (
       <div>
-        <div className={'todo'}>
+
+        <div className={'todo-status'}>
           <Stat done={done} total={totalTodo}/>
           <button onClick={()=> this.clearDone()}>clear</button>
         </div>
-        <div className={'todo'}>
+
+        <div className={'todo-list'}>
           <ul>
             {
-              this.state.todo.map((todo, index)=>(<Todo onDoneChange={()=>{
+              this.state.todos.map((todo, index)=>(<Todo onDoneChange={()=>{
                 this.handleDoneChange(index);
               }} key={index} todo={todo} />))
             }
           </ul>
         </div>
-        <div>
+        
+        <div className={'new-todo=form'}>
           <NewTodoForm onNewToDo={(todo)=>{
             this.addNewTodo(todo)
           }}/>
@@ -76,3 +79,5 @@ export default class App extends Component{
   }
   
 }
+
+export default App;
