@@ -4,7 +4,7 @@ import Stat               from './Components/StatComponent';
 import Todo               from './Components/TodoComponent';
 import NewTodoForm        from './Components/NewTodoFormComponent';
 
-class App extends Component{
+class App extends Component {
   state = {
     todos: [
       {name:'Todo 1', done:true},
@@ -30,14 +30,25 @@ class App extends Component{
     return done;
   }
 
-  clearDone(){
+  clearDone() {
     const notFinishedTodo = this.state.todos.filter((todo)=>!todo.done);
     this.setState({
       todos:notFinishedTodo
     })
   }
+
+  selectAll(right) {
+    const todos = this.state.todos;
+    for (let i = 0; i < todos.length; i++) {
+      todos[i].done = right;      
+    }
+    this.setState({
+      todos: todos
+    })
+  }
+
   handleDoneChange(todoIndex) {
-    let updatedTodos = this.state.todos;
+    let updatedTodos             = this.state.todos;
     updatedTodos[todoIndex].done = !updatedTodos[todoIndex].done;
 
     this.setState({
@@ -45,17 +56,18 @@ class App extends Component{
     })
   }
 
-  render(){
-    const done = this.countDone();
+  render() {
+    const done      = this.countDone();
     const totalTodo = this.state.todos.length;
-
 
     return (
       <div>
 
         <div className={'todo-status'}>
-          <Stat done={done} total={totalTodo}/>
-          <button onClick={()=> this.clearDone()}>clear</button>
+          <Stat done={done} total={totalTodo}/><br/>
+          <button onClick={() => this.selectAll(true)}>Select All</button>&nbsp;
+          <button onClick={() => this.selectAll(false)}>Unselect All</button>&nbsp;
+          <button onClick={()=> this.clearDone()}>Clear Done</button>
         </div>
 
         <div className={'todo-list'}>
@@ -67,8 +79,8 @@ class App extends Component{
             }
           </ul>
         </div>
-        
-        <div className={'new-todo=form'}>
+
+        <div className={'new-todo-form'}>
           <NewTodoForm onNewToDo={(todo)=>{
             this.addNewTodo(todo)
           }}/>

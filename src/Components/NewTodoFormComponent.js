@@ -18,17 +18,20 @@ export default class NewTodoForm extends React.Component {
           <input type="text" onChange={(even)=>{
             this.onInputChange(even.target.value);
           }} value={this.state.newTodoName}></input>
-  
-          <input type="submit" onClick={()=>{
-            onNewToDo({
-              name:this.state.newTodoName,
-              done: false
-            })
-            this.setState({
-              newTodoName: ""
-            })
-           
-          }}></input>
+          &nbsp;
+          <input type="submit"
+              onClick={
+                () => {
+                  onNewToDo(
+                    {
+                      name: this.state.newTodoName,
+                      done: false
+                    }
+                  )
+                }
+              }
+              value='ADD'>            
+          </input>
   
         </div>
       )

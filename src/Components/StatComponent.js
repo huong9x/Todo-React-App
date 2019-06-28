@@ -6,7 +6,6 @@ export default class Stat extends React.Component {
     return (
       <strong>
         <span>Done: {done}</span>/<span>Total: {total}</span>
-
       </strong>
     )
   }
