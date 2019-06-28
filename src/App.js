@@ -4,22 +4,30 @@ import Stat               from './Components/StatComponent';
 import Todo               from './Components/TodoComponent';
 import NewTodoForm        from './Components/NewTodoFormComponent';
 
+
 class App extends Component {
   state = {
-    todos: [
-      {name:'Todo 1', done:true},
-      {name:'Todo 2', done:false},
-      {name:'Todo 3', done:false},
-
-    ]
+    todos: [],
+    loading: true,
+    url: 'https://todos.sphinx-demo.com/todos/'
   }
 
-  addNewTodo(newTodo) {
-      this.setState({
-      todos:[newTodo, ...this.state.todos]
-    })
+  async addNewTodo(newTodo) {     
+      await this.postTodo(newTodo);
+      await this.getTodos();
   }
 
+  async postTodo(newTodo) {  
+
+    await fetch(this.state.url, {
+                method: 'POST', // or 'PUT'
+                body: JSON.stringify(newTodo), // data can be `string` or {object}!
+                headers:{
+                  'Content-Type': 'application/json'
+                }
+              })
+              .then(res => res.json());
+  }
   countDone() {
     let done = 0;
     this.state.todos.forEach(todo=>{
@@ -30,11 +38,15 @@ class App extends Component {
     return done;
   }
 
-  clearDone() {
-    const notFinishedTodo = this.state.todos.filter((todo)=>!todo.done);
-    this.setState({
-      todos:notFinishedTodo
-    })
+  async deleteTodo(todoId) {
+    await fetch(this.state.url + todoId, {
+                  method: 'DELETE'
+              }).then(res => res.json());
+  }
+  
+  async clearDone() {
+    await this.state.todos.filter(async (todo) => todo.done ? await this.deleteTodo(todo.id) : !todo.done);
+    await this.getTodos();    
   }
 
   selectAll(right) {
@@ -46,14 +58,30 @@ class App extends Component {
       todos: todos
     })
   }
-
-  handleDoneChange(todoIndex) {
-    let updatedTodos             = this.state.todos;
-    updatedTodos[todoIndex].done = !updatedTodos[todoIndex].done;
-
-    this.setState({
-      todos: updatedTodos
-    })
+  async updateTodo(todo) {
+    await fetch(this.state.url + todo.id, {
+          method: 'PUT', 
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({done: todo.done}),
+      });
+  }
+  async handleDoneChange(index) {
+    let updatedTodo = this.state.todos;
+    updatedTodo[index].done = !updatedTodo[index].done;
+    await this.updateTodo(updatedTodo[index]);
+    await this.getTodos();
+  }
+  async getTodos() {
+    await fetch('https://todos.sphinx-demo.com/todos')
+          .then(res => res.json())
+          .then((todos) => {
+            this.setState({ todos })
+          })
+  }
+  async componentDidMount() {
+    await this.getTodos();
   }
 
   render() {
