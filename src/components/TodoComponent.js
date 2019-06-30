@@ -7,13 +7,15 @@ export default class Todo extends React.Component{
     const todo = this.props.todo;
     const todoLableStyle =  this.props.todo.done ? {
       textDecoration : 'line-through',
-      color: "gray"
+      color: "red"
     }: {}
 
     return (
       <div>
-        <input type="checkbox" onChange={this.props.onDoneChange} checked={todo.done}></input>
-        <span style={todoLableStyle}>{todo.name}</span>
+        <label style={todoLableStyle}>
+          <input type="checkbox" onChange={this.props.onDoneChange} checked={todo.done}></input>          
+          &nbsp; {todo.name}
+        </label>
       </div>
     );
   } 
