@@ -110,6 +110,7 @@ class App extends Component {
                     </div>
                 </div>
             </div>
+            <br/><br/><br/>
             <div className={'todo-list'}>
                 {this.state.loading ? (
                     <div className={"flex"}><i className={'fa fa-3x fa-spin fa-spinner'}/></div>) : (
@@ -129,7 +130,7 @@ class App extends Component {
                     </ul>
                   )
                 }
-            </div>
+            </div>            
             <div className={'new-todo-form'}>
                 <NewTodoForm onNewToDo={ todo => this.addNewTodo(todo) } />
             </div>
